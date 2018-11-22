@@ -1,6 +1,10 @@
-var schedule = require('node-schedule');
+const schedule = require('node-schedule');
 const axios = require('axios');
 const math = require('mathjs');
+
+const config = {
+  fetchInterval: 5, // in seconds
+};
 
 // api urls
 const URLS = {
@@ -10,29 +14,18 @@ const URLS = {
   gemini: 'https://api.gemini.com/v1/pubticker/btcusd',
   itbit: 'https://api.itbit.com/v1/markets/XBTUSD/ticker',
 };
-let arr = [];
-// main loop, schedule that runs every 30 sec
-var main = schedule.scheduleJob('*/5 * * * * *', function() {
-  //   console.log('this runs every 5 seconds');
-  coinbaseData().then(response => {
-    arr.push(response);
-  });
-  krakenData().then(response => {
-    arr.push(response);
-  });
-  bitstampData().then(response => {
-    arr.push(response);
-  });
-  geminiData().then(response => {
-    arr.push(response);
-  });
-  itbitData().then(response => {
-    arr.push(response);
-  });
-  if (arr.length > 0) {
-    console.log('median:', math.median(arr));
-  }
-});
+
+let priceArr = [];
+
+// main loop, schedule that runs every interval, set in config
+var main = schedule.scheduleJob(
+  `*/${config.fetchInterval} * * * * *`,
+  function() {
+    //   console.log('this runs every 5 seconds');
+    priceArr = [];
+    data();
+  },
+);
 
 // api get function
 function getExhange(exchange) {
@@ -79,3 +72,30 @@ const itbitData = async () => {
     return exchange.data.lastPrice;
   }
 };
+
+const getData = async () => {
+  await coinbaseData().then(response => {
+    priceArr.push(response);
+  });
+  await krakenData().then(response => {
+    priceArr.push(response);
+  });
+  await bitstampData().then(response => {
+    priceArr.push(response);
+  });
+  await geminiData().then(response => {
+    priceArr.push(response);
+  });
+  await itbitData().then(response => {
+    priceArr.push(response);
+  });
+};
+
+const data = async () => {
+  await getData().then(response => {
+    // console.log(priceArr);
+    console.log('median:', math.median(priceArr));
+  });
+};
+
+data();
