@@ -15,6 +15,14 @@ const URLS = {
   itbit: 'https://api.itbit.com/v1/markets/XBTUSD/ticker',
 };
 
+let prices = {
+  coinbase: 0,
+  kraken: 0,
+  bitstamp: 0,
+  gemini: 0,
+  itBit: 0,
+};
+
 let priceArr = [];
 
 // main loop, schedule that runs every interval, set in config
@@ -75,25 +83,30 @@ const itbitData = async () => {
 
 const getData = async () => {
   await coinbaseData().then(response => {
+    prices.coinbase = response;
     priceArr.push(response);
   });
   await krakenData().then(response => {
+    prices.kraken = response;
     priceArr.push(response);
   });
   await bitstampData().then(response => {
+    prices.bitstamp = response;
     priceArr.push(response);
   });
   await geminiData().then(response => {
+    prices.gemini = response;
     priceArr.push(response);
   });
   await itbitData().then(response => {
+    prices.itBit = response;
     priceArr.push(response);
   });
 };
 
 const data = async () => {
   await getData().then(response => {
-    // console.log(priceArr);
+    console.log(prices);
     console.log('median:', math.median(priceArr));
   });
 };
