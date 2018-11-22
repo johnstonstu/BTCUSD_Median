@@ -106,9 +106,12 @@ const getData = async () => {
 
 const data = async () => {
   await getData().then(response => {
-    console.log(prices);
+    // console.log(prices);
     console.log('median:', math.median(priceArr));
+    return math.median(priceArr);
   });
 };
 
 data();
+
+module.exports = data();
