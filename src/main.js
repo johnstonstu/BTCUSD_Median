@@ -1,5 +1,6 @@
 var schedule = require('node-schedule');
 const axios = require('axios');
+const math = require('mathjs');
 
 // api urls
 const URLS = {
@@ -9,21 +10,34 @@ const URLS = {
   gemini: 'https://api.gemini.com/v1/pubticker/btcusd',
   itbit: 'https://api.itbit.com/v1/markets/XBTUSD/ticker',
 };
-
+let arr = [];
 // main loop, schedule that runs every 30 sec
-var main = schedule.scheduleJob('*/30 * * * * *', function() {
-  console.log('this runs every 30 seconds');
-  coinbaseData();
-  krakenData();
-  bitstampData();
-  geminiData();
-  itbitData();
+var main = schedule.scheduleJob('*/5 * * * * *', function() {
+  //   console.log('this runs every 5 seconds');
+  coinbaseData().then(response => {
+    arr.push(response);
+  });
+  krakenData().then(response => {
+    arr.push(response);
+  });
+  bitstampData().then(response => {
+    arr.push(response);
+  });
+  geminiData().then(response => {
+    arr.push(response);
+  });
+  itbitData().then(response => {
+    arr.push(response);
+  });
+  if (arr.length > 0) {
+    console.log('median:', math.median(arr));
+  }
 });
 
 // api get function
-async function getExhange(exchange) {
+function getExhange(exchange) {
   try {
-    return await axios.get(exchange);
+    return axios.get(exchange);
   } catch (error) {
     console.error(error);
   }
@@ -33,34 +47,35 @@ async function getExhange(exchange) {
 const coinbaseData = async () => {
   const exchange = await getExhange(URLS.coinbase);
   if (exchange.data) {
-    console.log('Coinbase:', exchange.data.price);
+    return exchange.data.price;
   }
 };
 
 const krakenData = async () => {
   const exchange = await getExhange(URLS.kraken);
+
   if (exchange.data) {
-    console.log('Kraken:', exchange.data.result.XXBTZUSD.c[0]);
+    return exchange.data.result.XXBTZUSD.c[0];
   }
 };
 
 const bitstampData = async () => {
   const exchange = await getExhange(URLS.bitstamp);
   if (exchange.data) {
-    console.log('Bitstamp:', exchange.data.last);
+    return exchange.data.last;
   }
 };
 
 const geminiData = async () => {
   const exchange = await getExhange(URLS.gemini);
   if (exchange.data) {
-    console.log('Bitstamp:', exchange.data.last);
+    return exchange.data.last;
   }
 };
 
 const itbitData = async () => {
   const exchange = await getExhange(URLS.itbit);
   if (exchange.data) {
-    console.log('itBit:', exchange.data.lastPrice);
+    return exchange.data.lastPrice;
   }
 };
