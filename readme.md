@@ -6,7 +6,9 @@
 
     - clone repo locally
 
-    ```npm install```
+    ```
+    npm install
+    ```
 
 ### To run
 
