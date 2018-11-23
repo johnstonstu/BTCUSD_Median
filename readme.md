@@ -6,15 +6,15 @@
 
     - clone repo locally
 
-    - ```npm install```
+    npm install
 
 ### To run
 
-    `cd src`
+    cd src
 
-    `node hitbtc_orders.js`
+    node hitbtc_orders.js
 
-    `node btc_price.js`
+    node btc_price.js
 
 #### TODO:
 
