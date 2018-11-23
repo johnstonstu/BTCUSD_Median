@@ -1,4 +1,4 @@
-## BTC-> DAI -> USD
+## BTC -> DAI -> USD
 
 ### This is a program to check the loss / gain of transfering different ammounts of BTC to DAI through hitbtc
 
