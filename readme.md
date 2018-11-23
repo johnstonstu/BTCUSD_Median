@@ -22,7 +22,7 @@
 
     - build function to accept different ammountBtc in hitbtc_orders.
 
-    - do math on base point loss / gaian
+    - do math on base point loss / gain
     
     - output data to graph, json or database
 
