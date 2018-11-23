@@ -1,10 +1,15 @@
 const axios = require('axios');
-// const price = require('./btc_price.js');
+const price = require('./btc_price.js');
+
+// TODO: get price from btc_price
+// build function simulate with different order.ammountBtc [1,10,1000..]
+// determine basepoint loss / gain
+// get btc->eth->dai started
 
 const config = {
-  orderLimit: 10,
-  btc: 1,
+  orderLimit: 25,
   tradeFee: 10,
+  btcPrice: price,
 };
 
 const urls = {
@@ -14,33 +19,38 @@ const urls = {
 };
 
 let order = {
-  ammountDai: 0,
+  amountBtc: 1,
+  amountDai: 0,
   avgRate: [],
 };
 
-// ask == selling
-// bid == buying
+// ask == people selling BTC for DAI
+// bid == people looking to buy BTC with DAI
 let askArr,
   bidArr = [];
 
 axios
   .get(urls.orderbook)
   .then(function(response) {
-    askArr = response.data.ask;
     bidArr = response.data.bid;
 
-    for (i = 0; i < askArr.length; i++) {
-      for (x = 0; x < config.btc; x++) {
-        config.btc = config.btc - askArr[i].size;
-
-        order.ammountDai = askArr[i].size * askArr[i].price;
-
-        order.avgRate.push(askArr[i]);
-
-        console.log(order);
+    while (order.amountBtc > 0) {
+      for (i = 0; i < bidArr.length; i++) {
+        if (order.amountBtc > bidArr[i].size) {
+          order.amountBtc = order.amountBtc - bidArr[i].size;
+          order.amountDai = bidArr[i].size * bidArr[i].price;
+        } else {
+          order.amountDai = order.amountBtc * bidArr[i].price;
+          order.amountBtc = 0;
+          i = bidArr.length;
+        }
       }
     }
+    console.log(order);
+    console.log(config);
   })
   .catch(function(error) {
     console.log(error);
   });
+
+function getVolPrice(numBTC) {}

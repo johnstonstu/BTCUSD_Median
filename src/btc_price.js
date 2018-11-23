@@ -26,14 +26,14 @@ let prices = {
 let priceArr = [];
 
 // main loop, schedule that runs every interval, set in config
-var main = schedule.scheduleJob(
-  `*/${config.fetchInterval} * * * * *`,
-  function() {
-    //   console.log('this runs every 5 seconds');
-    priceArr = [];
-    data();
-  },
-);
+// var main = schedule.scheduleJob(
+//   `*/${config.fetchInterval} * * * * *`,
+//   function() {
+//     //   console.log('this runs every 5 seconds');
+//     priceArr = [];
+//     data();
+//   },
+// );
 
 // api get function
 function getExhange(exchange) {
@@ -112,6 +112,8 @@ const data = async () => {
   });
 };
 
-data();
+// data();
 
+// exports as a pending promise (needs to be resolved)
+// goal is to export the median btc price to use in the hitbtc_orders
 module.exports = data();
