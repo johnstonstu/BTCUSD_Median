@@ -20,10 +20,12 @@
 
     - resolve exported 'data' promise from btc_price.js
 
-    - build funciton to accept different ammountBtc in hitbtc_orders.
+    - build function to accept different ammountBtc in hitbtc_orders.
 
-    - do math on base point logg / gaian
+    - do math on base point loss / gaian
+    
+    - output data to graph, json or database
 
     - set data fetch schedule (1-30sec)
 
-    - output data to graph, json or database
+   
