@@ -1,6 +1,6 @@
 ## BTC -> DAI -> USD
 
-### This is a program to check the loss / gain of transfering different ammounts of BTC to DAI through hitbtc
+### This is a program get the median BTCUSD price then to check the loss / gain of transfering different ammounts of BTC to DAI through hitbtc
 
 ### installation
 
